@@ -51,12 +51,12 @@ An example of the final ascii file is given below.
 **** data/brock200_1.clq
 The file contains the list of edges 
 
-3 2
-4 2
-...
-200 196
-200 197
-200 199
+3 2 \\
+4 2 \\
+... \\
+200 196 \\
+200 197 \\
+200 199 
 
 *** TODO Main script for single run 
 *** TODO Meta-script for DIMACS import directly from .tar.gz file
