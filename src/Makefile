@@ -1,7 +1,8 @@
 # This Makefile is used under Linux
 
-SVMDIR=${HOME}/netgem-research/lib/libsvm-3.1
-SVMMATDIR=${HOME}/netgem-research/lib/libsvm-3.1/matlab
+SVMDIR=../lib/libsvm-3.1
+SVMMATDIR=$(SVMDIR)/matlab
+
 # for Mac
 # MATLABDIR ?= /opt/local/matlab
 

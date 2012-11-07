@@ -31,22 +31,7 @@ function [model] = findIndependentSetCSVM(K, varargin)
 
 %% Pre-processsing
 
-% add path for LIBSVM
-if exist('process_options') == 0
-  run('../startup.m'); 
-end
-
-if exist('svmtrain')==0
-    warning('lmb:debug', 'LIBSVM path is hard coded'); 
-    LIBSVM_ROOT='~/netgem-research/lib/libsvm-3.1'; 
-    [svmpath, varargin] = process_options(varargin, 'svmpath', ...
-        [LIBSVM_ROOT '/matlab']); 
-    addpath(svmpath); 
-end
-if exist('svmWriteKernel') == 0
-    addpath('~/netgem-research/cvx_work/vjLibsvmApi'); 
-end
-obj = @(x, K) 2*sum(x) - x'*K *x; 
+obj = @(x, K) 2*sum(x) - x'*K *x;
 
 %% Initialization 
 assert(size(K, 1) == size(K, 2)); 
@@ -64,7 +49,7 @@ N = size(K, 1);
 [rho, varargin] = process_options(varargin, 'rho', 0.0); % unspecified 
 [c_threshold, varargin] = process_options(varargin, 'c_threshold', 0); %unspecified
 [gamma_req, varargin] = process_options(varargin, 'gamma_req', 0); 
-[SVMROOT, varargin] = process_options(varargin,  'SVMROOT', '~/netgem-research/lib/libsvm-3.1');
+[SVMROOT, varargin] = process_options(varargin,  'SVMROOT', getenv('LIBSVM_ROOT'));
 [plot_gamma, varargin] = process_options(varargin, 'plot_gamma', false); 
 [gamma_file, varargin] = process_options(varargin, 'gamma_file', tempname); 
 
