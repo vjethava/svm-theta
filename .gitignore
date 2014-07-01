@@ -3,3 +3,5 @@
 lib/libsvm-3.1/svm-predict
 lib/libsvm-3.1/svm-scale
 lib/libsvm-3.1/svm-train
+*.m~
+*.*~

@@ -62,6 +62,42 @@ The file contains the list of edges
 *** TODO Meta-script for DIMACS import directly from .tar.gz file
 *** TODO Convert to command-line tool
      
+
+*** Faster Eigenvalue computation
+Running eigs with the option to compute largest eigenvalue works
+better in practice large graphs. Here is the necessary code:
+
+    A = getPlantedClique(n, p, k);
+    d_max = max(sum(A, 2)); % maximum degree
+    D = d_max*eye(n) - A;  % psd matrix -- diagonal dominance
+    l_max = eigs(D, 1, 'LM'); % maximum eigenvalue of D
+    rho = d_max - l_max; % minimum eigenvalue of A
+
+Example code with timing information below: 
+
+    >> n = 2000; p=0.5; A = getPlantedClique(n, p, ceil(6*sqrt(n)));
+    >> tic; eig(A); toc
+    Elapsed time is 0.852337 seconds.
+    >> tic; eigs(A, 1, 'LM'); toc
+    Elapsed time is 0.151511 seconds.
+    >> n = 5000; p=0.5; A = getPlantedClique(n, p, ceil(6*sqrt(n)));
+    >> tic; eigs(A, 1, 'LM'); toc
+    Elapsed time is 0.405706 seconds.
+    >> n = 10000; p=0.5; A = getPlantedClique(n, p, ceil(6*sqrt(n)));
+    >> tic; eigs(A, 1, 'LM'); toc
+    Elapsed time is 1.526702 seconds.
+    >> n = 30000; p=0.5; A = getPlantedClique(n, p, ceil(6*sqrt(n)));
+    >> tic; eigs(A, 1, 'LM'); toc
+    Elapsed time is 13.372366 seconds.
+
+*** TODO Computation using CUDA
+Lanczos can be further optimized using GPGPU implementation. Available
+implementation at http://itp.tu-graz.ac.at/~ralfgam/. Uses CSR
+(Compressed Sparse Row) format (see
+[[http://research.microsoft.com/pubs/172749/gpu_tr_12.pdf]] and SpMV) 
+
+Also see SLEPc, PETSc, ViennaCL and Eigen3. Look at old Eigen3 self-code
+
 ** License
     
 This program is free software: you can redistribute it and/or modify 

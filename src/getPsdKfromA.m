@@ -22,7 +22,7 @@ function [K, rho, ta] = getPsdKfromA(A, varargin)
 % Copyright (c) 2011, Vinay Jethava (vjethava@gmail.com)                 
 %                                                                        
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-[maxN, varargin] = process_options(varargin, 'maxN', 1000); 
+[maxN, varargin] = process_options(varargin, 'maxN', 100000); 
 [use_max_deg, varargin] = process_options(varargin, 'use_max_deg', ...
                                           0);  
 [use_eigen, varargin] = process_options(varargin, 'use_eigen', 0);  
@@ -35,8 +35,12 @@ if ((N > maxN)  || (use_max_deg == 1)) && (use_eigen == 0)
   method='max_deg';
 else
   method='eigen';
-  [U, D] = eig(A);
-  rho = -min(diag(D));        % lambdaMinOfA < 0 as Tr(A)=0
+  %% HACK -- Using eigs (Lanczos)
+  d_max = getMaxDeg(A);
+  L = d_max * eye(N) - A; 
+  lambda_max_L = eigs(L, 1, 'LM'); 
+  rho = d_max - lambda_max_L;
+%  rho = -min(diag(D));        % lambdaMinOfA < 0 as Tr(A)=0
 end
 K  = eye(N) + A/rho; % positive semi-definite 
 ta = toc; 
